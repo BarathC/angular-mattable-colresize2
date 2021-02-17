@@ -1,0 +1,28 @@
+<div class="mat-elevation-z8">
+	<div class="action-bar">
+		<button va-mat-table-column-sorter
+         [columns]="displayedColumns"
+         (columnsChange)="columnsReordered($event)"
+         [columnNames]="displayedColumnsNames"
+         [saveName]="'example-table'">
+         <mat-icon>view_column</mat-icon>
+         Columns
+      </button>
+	</div>
+	<mat-table [dataSource]="dataSource"  #matTable cdkDropListGroup>
+
+		<ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
+			<mat-header-cell *matHeaderCellDef #headercell>
+				<div class="header-root">
+					<span class='header-text'>{{column.field}} </span>
+            <mat-icon class="pin" matTooltip="{{column.pinned == false? 'Pin left': 'Unpin'}}" (click)="fnPinColumn(column)">{{column.pinned == false? 'push_pin': 'clear'}}</mat-icon>
+					<mat-divider appTableResize  [index]="i" [column]="headercell" [table]="matTable" [resizeColumn]=true *ngIf="i < columns.length - 1" class="divider" [vertical]="true"
+						(mousedown)="onResizeColumn($event,headercell, i)"></mat-divider>
+				</div>
+			</mat-header-cell>
+			<mat-cell *matCellDef="let row"> {{ row[column.field] }} </mat-cell>
+		</ng-container>
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+</div>

@@ -1,0 +1,26 @@
+<button color="primary" mat-stroked-button [matMenuTriggerFor]="columnMenu">
+    <ng-content></ng-content>
+</button>
+<mat-menu #columnMenu="matMenu">
+	<div class="va-mat-table-dragable-container" cdkDropList dkDropListLockAxis="y" cdkDropListOrientation="vertical" [cdkDropListSortPredicate]="sortPredicate">
+		<div class="dragable-row" *ngFor="let column of columnInfo; let i = index" cdkDrag
+			[cdkDragData]="{columnIndex: i, columnTitle: column.id}" (cdkDragDropped)="columnMenuDropped($event)" [cdkDragDisabled]="column.pinned">
+			<mat-icon cdkDragHandle>drag_indicator</mat-icon>
+			<mat-checkbox [disabled]="column.preventBeingHidden || column.pinned" [checked]="!column.hidden"
+				(click)="$event.stopPropagation();" (change)="toggleSelectedColumn(column.id)">
+				{{ column.name }}
+			</mat-checkbox>
+      <!-- <ng-template #pinned>
+        <mat-icon> push_pin</mat-icon>
+        <div>	{{ column.name }}</div>
+      </ng-template> -->
+
+			<mat-card class="va-mat-table-drag-preview" *cdkDragPreview>
+				<!-- <mat-icon>drag_indicator</mat-icon> -->
+				<mat-checkbox [checked]="!column.hidden">
+					{{ column.name }}
+				</mat-checkbox>
+			</mat-card>
+		</div>
+	</div>
+</mat-menu>
